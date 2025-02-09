@@ -15,9 +15,14 @@ export const fetchImages = async (query, page = 1) => {
         per_page: 40, 
       },
     });
-    return response.data.hits;
+
+    return {
+      images: response.data.hits,
+      totalHits: response.data.totalHits,
+    };
   } catch (error) {
-    console.error("Error fetching images: ", error);
-    throw new Error("Unable to fetch images.");
+    console.error("Error fetching images: ", error.response?.data || error.message);
+    throw new Error("Unable to fetch images.");  
   }
 };
+
