@@ -1,23 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vanilla App Template</title>
-    <link rel="stylesheet" href="./css/styles.css" />
-  </head>
-  <body>
-    <load src="./partials/header.html" icon-path="img/sprite.svg#logo" />
 
-    <main>
-      <!-- Loads the specified .html file -->
-      <load src="./partials/vite-promo.html" />
-      <load src="./partials/badges.html" />
-    </main>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Search App</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/izitoast@1.4.0/dist/css/iziToast.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplelightbox@2.1.2/dist/simple-lightbox.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="./css/styles.css">
+</head>
 
-    <load src="./partials/footer.html" />
+<body>
+  <header>
+    <form id="search-form">
+      <input type="text" id="search-input" placeholder="Search for images..." required>
+      <button type="submit">Search</button>
+    </form>
+    <button id="load-more-btn" class="load-more-btn" style="display: none;">Load more</button>
+    <span class="loader"></span>
+  </header>
+  <main>
+    <section id="gallery" class="gallery"></section>
+  </main>
+  <script type="module" src="./main.js" defer></script>
+  <script type="module" src="./js/pixabay-api.js"></script>
+  <script type="module" src="./js/render-functions.js"></script>
+</body>
 
-    <script type="module" src="./main.js"></script>
-  </body>
 </html>
