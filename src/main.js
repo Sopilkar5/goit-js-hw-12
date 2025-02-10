@@ -72,11 +72,11 @@ searchForm.addEventListener("submit", async (e) => {
 
 
 loadMoreBtn.addEventListener("click", async () => {
-  console.log(`Current Page: ${currentPage}, Total Hits: ${totalHits}`);
-  
-  if ((currentPage - 1) * 40 >= totalHits) {
-    console.log("No more images to load.");
-    loadMoreBtn.style.display = "none";
+
+  const imagesToLoad = currentPage * 40; 
+
+  if (imagesToLoad >= totalHits) {
+    loadMoreBtn.style.display = "none"; 
     iziToast.info({
       message: "We're sorry, but you've reached the end of search results.",
       position: "topRight",
@@ -89,15 +89,12 @@ loadMoreBtn.addEventListener("click", async () => {
   loader.style.display = "block"; 
 
   try {
-    console.log(`Fetching images for page ${currentPage}...`);
     const { images, totalHits: total } = await fetchImages(currentQuery, currentPage);
     totalHits = total; 
 
-    console.log(`Images received on page ${currentPage}:`, images.length);
-
-    if (images.length === 0 || currentPage * 40 >= totalHits) {
-      console.log("Reached the end of results.");
-      loadMoreBtn.style.display = "none";
+    if (images.length === 0 || (images.length < 40 && imagesToLoad >= totalHits)) {
+      
+      loadMoreBtn.style.display = "none";  
       iziToast.info({
         message: "We're sorry, but you've reached the end of search results.",
         position: "topRight",
@@ -106,7 +103,6 @@ loadMoreBtn.addEventListener("click", async () => {
       renderImages(images);
     }
   } catch (error) {
-    console.error("Error fetching more images:", error);
     showErrorMessage("Failed to fetch more images. Please try again later.");
   } finally {
     loader.style.display = "none"; 
