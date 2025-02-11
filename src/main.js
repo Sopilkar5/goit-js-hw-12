@@ -22,7 +22,6 @@ gallery.classList.add("gallery");
 searchForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-
   const query = searchInput.value.trim();
   if (!query) {
     showErrorMessage("Please enter a search term.");
@@ -35,7 +34,6 @@ searchForm.addEventListener("submit", async (e) => {
 
   gallery.innerHTML = "";
   loadMoreBtn.style.display = "none"; 
-
   loader.style.display = "block"; 
 
   try {
@@ -48,7 +46,7 @@ searchForm.addEventListener("submit", async (e) => {
     }
 
     renderImages(images);
-
+    
     if (images.length > 0) {
       gallery.insertAdjacentElement("afterend", loadMoreBtn);
       loadMoreBtn.style.display = "block";
@@ -70,37 +68,30 @@ searchForm.addEventListener("submit", async (e) => {
   searchInput.value = "";
 });
 
-
 loadMoreBtn.addEventListener("click", async () => {
-
-  const imagesToLoad = currentPage * 40; 
-
-  if (imagesToLoad >= totalHits) {
-    loadMoreBtn.style.display = "none"; 
-    iziToast.info({
-      message: "We're sorry, but you've reached the end of search results.",
-      position: "topRight",
-    });
-    return;
-  }
-
   currentPage += 1;
   loadMoreBtn.insertAdjacentElement("afterend", loader);
   loader.style.display = "block"; 
 
   try {
     const { images, totalHits: total } = await fetchImages(currentQuery, currentPage);
-    totalHits = total; 
+    totalHits = total;
 
-    if (images.length === 0 || (images.length < 40 && imagesToLoad >= totalHits)) {
-      
-      loadMoreBtn.style.display = "none";  
+    if (images.length === 0) {
+      loadMoreBtn.style.display = "none";
+      return;
+    }
+
+    renderImages(images);
+
+    const totalLoadedImages = (currentPage - 1) * 40 + images.length;
+
+    if (totalLoadedImages >= totalHits) {
+      loadMoreBtn.style.display = "none";
       iziToast.info({
         message: "We're sorry, but you've reached the end of search results.",
         position: "topRight",
       });
-    } else {
-      renderImages(images);
     }
   } catch (error) {
     showErrorMessage("Failed to fetch more images. Please try again later.");
